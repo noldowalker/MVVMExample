@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using mvvm.example.Open;
+using mvvm.example.ViewModel.Example;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -11,19 +13,22 @@ namespace mvvm.example
 {
     public class UiManager : MonoBehaviour
     {
-        [SerializeField] private Transform canvas;
+        [SerializeField] 
+        private Transform canvas;
         [Inject]
         private ExamplePanelModel.Factory _exampleModelFactory;
         [Inject]
+        private ExamplePanelViewModel.Factory _exampleViewModelFactory;
+        [Inject]
         private Panel.Factory _panelsFactory;
 
-        private List<Panel> _panelsStack;
+        private Stack<Panel> _panelsStack;
 
         public void Awake()
         {
-            _panelsStack = new List<Panel>();
+            _panelsStack = new Stack<Panel>();
             var panel = (OpenPanel)_panelsFactory.Create(Panels.Open, canvas);
-            _panelsStack.Add(panel);
+            _panelsStack.Push(panel);
             panel.OnOpenAction += () => OpenButtonClick();
         }
 
@@ -35,11 +40,11 @@ namespace mvvm.example
 
         private void Open(ExamplePanelModel panelModel)
         {
-            panelModel.RegenerateValueForCurrentField();
-            var panel = _panelsFactory.Create(panelModel.PanelType, canvas);
+            var panelViewModel = _exampleViewModelFactory.Create(panelModel);
+            var panel = (ExamplePanelView)_panelsFactory.Create(panelModel.PanelType, canvas);
+            panel.SetModel(panelViewModel);
             _panelsStack.Last().gameObject.SetActive(false);
-            _panelsStack.Add(panel);
-            panel.gameObject.SetActive(true);
+            _panelsStack.Push(panel);
         }
     }
 }

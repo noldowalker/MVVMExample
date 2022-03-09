@@ -22,7 +22,7 @@ namespace mvvm.example
             switch (type)
             {
                 case Panels.Open: return _container.InstantiatePrefabForComponent<OpenPanel>(panelData.panelPrefub, parent);
-                case Panels.Example: return _container.InstantiatePrefabForComponent<ExamplePanel>(panelData.panelPrefub, parent);
+                case Panels.Example: return _container.InstantiatePrefabForComponent<ExamplePanelView>(panelData.panelPrefub, parent);
             }
 
             return null;
