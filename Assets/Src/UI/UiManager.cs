@@ -38,11 +38,20 @@ namespace mvvm.example
             Open(model);
         }
 
-        private void Open(ExamplePanelModel panelModel)
+        private void Open(PanelModel panelModel)
+        {
+            switch (panelModel)
+            {
+                case ExamplePanelModel panel: OpenExample(panel);
+                    break;
+            }
+        }
+        
+        private void OpenExample(ExamplePanelModel panelModel)
         {
             var panelViewModel = _exampleViewModelFactory.Create(panelModel);
             var panel = (ExamplePanelView)_panelsFactory.Create(panelModel.PanelType, canvas);
-            panel.SetModel(panelViewModel);
+            panel.SetViewModel(panelViewModel);
             _panelsStack.Last().gameObject.SetActive(false);
             _panelsStack.Push(panel);
         }

@@ -41,7 +41,7 @@ namespace mvvm.example
 
         public event PropertyChangedEventHandler PropertyChanged;
         
-        public void SetModel(ExamplePanelViewModel model)
+        public void SetViewModel(ExamplePanelViewModel model)
         {
             _viewModel = model;
             for (int i = 0; i < _viewModel.GetTabsCount(); i++)
